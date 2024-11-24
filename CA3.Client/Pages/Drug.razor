@@ -1,9 +1,11 @@
 ﻿@page "/drug"
-@using System.Net.Http.Json
+@using CA3.Client.Pages
 
 <h3>Drug List</h3>
 
-<button @onclick="LoadDrugs">Load Drugs</button>
+<button class="btn btn-primary" @onclick="LoadDrugs" disabled="@isLoading">
+    @(isLoading ? "Loading..." : "Load Drugs")
+</button>
 
 @if (isLoading)
 {
@@ -11,82 +13,61 @@
 }
 else if (drugs != null && drugs.Any())
 {
-    <table>
-        <tr>
-            <th>Drug Name</th>
-            <th>Count</th>
-        </tr>
-        @foreach (var drug in drugs)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <th>@drug.Name</th>
-                <th>@drug.Count</th>
+                <th>Brand Name</th>
+                <th>Generic Name</th>
+                <th>Purpose</th>
+                <th>Warnings</th>
             </tr>
-        }
-        
+        </thead>
+        <tbody>
+            @foreach (var drug in drugs)
+            {
+                <tr>
+                    <td>@string.Join(", ", drug.Openfda?.BrandName ?? new List<string>())</td>
+                    <td>@string.Join(", ", drug.Openfda?.GenericName ?? new List<string>())</td>
+                    <td>@string.Join("<br>", drug.Purpose ?? new List<string>())</td>
+                    <td>@string.Join("<br>", drug.Warnings ?? new List<string>())</td>
+                </tr>
+            }
+        </tbody>
     </table>
-
 }
 else if (!string.IsNullOrWhiteSpace(errorMessage))
 {
     <p style="color: red;">@errorMessage</p>
 }
+else
+{
+    <p>No drugs found.</p>
+}
 
 @code {
-    // <th>Route</th>
-    // <th>More Info</th>
+    [Inject]
+    private DrugService DrugService { get; set; } = default!;
 
-
-    private List<Drugs>? drugs = null;
-    private string? errorMessage = null;
+    private List<FullDrug> drugs = new();
     private bool isLoading = false;
+    private string? errorMessage;
 
     private async Task LoadDrugs()
     {
         isLoading = true;
         errorMessage = null;
-        drugs = null;
 
         try
         {
-            using var httpClient = new HttpClient();
-            string url = "https://api.fda.gov/drug/label.json?count=openfda.brand_name.exact&limit=100";
-            var response = await httpClient.GetFromJsonAsync<DrugListResponse>(url);
-
-            if (response != null && response.Results != null)
-            {
-                drugs = response.Results.Select(r => new Drugs { Name = r.Term, Count = r.Count }).ToList();
-            }
-            else
-            {
-                errorMessage = "No drugs found.";
-            }
+            drugs = await DrugService.GetDrugsAsync();
         }
         catch (Exception ex)
         {
-            errorMessage = $"Error fetching drug list: {ex.Message}";
+            errorMessage = $"Error loading drugs: {ex.Message}";
         }
         finally
         {
             isLoading = false;
         }
-    }
-
-    // API Response Models
-    private class DrugListResponse
-    {
-        public List<DrugResponse>? Results { get; set; } // Matches the "results" array in the API response
-    }
-
-    private class DrugResponse
-    {
-        public string Term { get; set; } = string.Empty; // Drug name
-        public int Count { get; set; } // Number of occurrences
-    }
-
-    private class Drugs
-    {
-        public string Name { get; set; } = string.Empty;
-        public int Count { get; set; }
     }
 }

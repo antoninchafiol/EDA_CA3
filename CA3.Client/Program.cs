@@ -1,7 +1,10 @@
+using CA3.Client.Pages;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using static CA3.Client.Pages.Drug;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+builder.Services.AddScoped<DrugService>();
 
 await builder.Build().RunAsync();
