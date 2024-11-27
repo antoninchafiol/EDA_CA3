@@ -1,54 +1,35 @@
 ﻿@page "/drug"
 @using CA3.Client.Pages
+@using Microsoft.AspNetCore.Components.QuickGrid
+
 
 <h3>Drug List</h3>
-
 <button class="btn btn-primary" @onclick="LoadDrugs" disabled="@isLoading">
-    @(isLoading ? "Loading..." : "Load Drugs")
+             @(isLoading ? "Loading..." : "Load Drugs")    
 </button>
+<br>
+<br>
+<br>
+@if (drugs != null && drugs.Any())
+{
+    <QuickGrid Items="@drugs.AsQueryable()" Pagination="pagination">
+    <PropertyColumn Property="@(p => string.Join( ",", p.Openfda.GenericName.ToArray() ))" Sortable="true" Title="Generic Names" />
+    <PropertyColumn Property="@(p => string.Join( ",", p.Openfda.ApplicationNumber.ToArray() ))" Sortable="true" Title="Application Number" />
+    <Paginator State="pagination" />
+</QuickGrid>
 
-@if (isLoading)
-{
-    <p>Loading...</p>
-}
-else if (drugs != null && drugs.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Brand Name</th>
-                <th>Generic Name</th>
-                <th>Purpose</th>
-                <th>Warnings</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var drug in drugs)
-            {
-                <tr>
-                    <td>@string.Join(", ", drug.Openfda?.BrandName ?? new List<string>())</td>
-                    <td>@string.Join(", ", drug.Openfda?.GenericName ?? new List<string>())</td>
-                    <td>@string.Join("<br>", drug.Purpose ?? new List<string>())</td>
-                    <td>@string.Join("<br>", drug.Warnings ?? new List<string>())</td>
-                </tr>
-            }
-        </tbody>
-    </table>
 }
 else if (!string.IsNullOrWhiteSpace(errorMessage))
 {
     <p style="color: red;">@errorMessage</p>
 }
-else
-{
-    <p>No drugs found.</p>
-}
 
 @code {
     [Inject]
     private DrugService DrugService { get; set; } = default!;
-
+    PaginationState pagination = new PaginationState { ItemsPerPage = 2 };
     private List<FullDrug> drugs = new();
+
     private bool isLoading = false;
     private string? errorMessage;
 
@@ -60,6 +41,7 @@ else
         try
         {
             drugs = await DrugService.GetDrugsAsync();
+            // drugs = temp_drugs.AsQueryable();
         }
         catch (Exception ex)
         {
