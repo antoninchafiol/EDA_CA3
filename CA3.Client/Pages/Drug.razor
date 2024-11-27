@@ -12,11 +12,39 @@
 <br>
 @if (drugs != null && drugs.Any())
 {
-    <QuickGrid Items="@drugs.AsQueryable()" Pagination="pagination">
-    <PropertyColumn Property="@(p => string.Join( ",", p.Openfda.GenericName.ToArray() ))" Sortable="true" Title="Generic Names" />
-    <PropertyColumn Property="@(p => string.Join( ",", p.Openfda.ApplicationNumber.ToArray() ))" Sortable="true" Title="Application Number" />
-    <Paginator State="pagination" />
-</QuickGrid>
+    <MudTable T="FullDrug" Items="@drugs.AsQueryable()" Dense="true" Hover="true" Bordered="true" Striped="true" Breakpoint="Breakpoint.Sm"
+              @ref="mudTable" RowClass="cursor-pointer" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">List of Drugs</MudText>
+            <MudSpacer />
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Application Number</MudTh>
+            <MudTh>Generic Name</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Application Number">@string.Join("", context.Openfda.ApplicationNumber)</MudTd>
+            <MudTd DataLabel="Generic Name">@string.Join("", context.Openfda.GenericName) </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+    <MudExpansionPanels Style="flex: 1;">
+        <MudExpansionPanel Text="Show inline-clicked event log">
+            @foreach (var message in clickedEvents)
+            {
+                <MudText>@message</MudText>
+            }
+            @if (clickedEvents.Count > 0)
+            {
+                <div class="d-flex">
+                    <MudSpacer />
+                    <MudButton Class="mt-3" ButtonType="ButtonType.Button" Variant="Variant.Filled" OnClick="@(() => clickedEvents.Clear())">Clear events</MudButton>
+                </div>
+            }
+        </MudExpansionPanel>
+    </MudExpansionPanels>
 
 }
 else if (!string.IsNullOrWhiteSpace(errorMessage))
@@ -25,13 +53,16 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
 }
 
 @code {
+
     [Inject]
     private DrugService DrugService { get; set; } = default!;
-    PaginationState pagination = new PaginationState { ItemsPerPage = 2 };
     private List<FullDrug> drugs = new();
-
     private bool isLoading = false;
     private string? errorMessage;
+
+    private int selectedRowNumber = -1;
+    private MudTable<FullDrug> mudTable;
+    private List<string> clickedEvents = new();
 
     private async Task LoadDrugs()
     {
@@ -41,7 +72,6 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
         try
         {
             drugs = await DrugService.GetDrugsAsync();
-            // drugs = temp_drugs.AsQueryable();
         }
         catch (Exception ex)
         {
@@ -50,6 +80,31 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
         finally
         {
             isLoading = false;
+        }
+    }
+
+    private void RowClickEvent(TableRowClickEventArgs<FullDrug> tableRowClickEventArgs)
+    {
+        clickedEvents.Add("Row has been clicked");
+    }
+
+    private string SelectedRowClassFunc(FullDrug element, int rowNumber)
+    {
+        if (selectedRowNumber == rowNumber)
+        {
+            selectedRowNumber = -1;
+            clickedEvents.Add("Selected Row: None");
+            return string.Empty;
+        }
+        else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(element))
+        {
+            selectedRowNumber = rowNumber;
+            clickedEvents.Add($"Selected Row: {rowNumber}");
+            return "selected";
+        }
+        else
+        {
+            return string.Empty;
         }
     }
 }
