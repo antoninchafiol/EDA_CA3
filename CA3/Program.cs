@@ -5,9 +5,11 @@ using MudBlazor.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMudServices();
+
 builder.Services.AddHttpClient();
 //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://api.fda.gov/") });
 
+builder.Services.AddScoped<DrugService>();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();

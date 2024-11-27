@@ -1,15 +1,11 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json.Serialization;
+using System.Net.Http;
 
 namespace CA3.Client.Pages;
 public class DrugService
 {
-    private readonly HttpClient _httpClient = new();
-
-    private int currentPage = 1;        // Current page number
-    private int pageSize = 5;         // Number of items per page
-    private int totalItemCount = 0;    // Total number of items from the API
-
+    private readonly HttpClient _httpClient;
 
     public DrugService(HttpClient httpClient)
     {
@@ -18,27 +14,14 @@ public class DrugService
 
     public async Task<List<FullDrug>> GetDrugsAsync()
     {
-        int skip = (currentPage - 1) * pageSize;
-        string url = $"https://api.fda.gov/drug/label.json?search=_exists_:openfda.route+AND+_exists_:openfda.application_number&limit={pageSize}&skip={skip}";
-        string url_nonskip = $"https://api.fda.gov/drug/label.json?search=_exists_:openfda.route+AND+_exists_:openfda.application_number&limit=100";
+        string url = $"https://api.fda.gov/drug/label.json?search=_exists_:openfda.route+AND+_exists_:openfda.application_number&limit=100";
         try
         {
-            var response = await _httpClient.GetFromJsonAsync<DrugListResponse>(url_nonskip);
+            var response = await _httpClient.GetFromJsonAsync<DrugListResponse>(url);
 
             if (response?.Results != null)
             {
                 var res = response.Results.ToList();
-                //foreach (var drug in res)
-                //{   
-                //    foreach (var d in drug.Openfda.ApplicationNumber) 
-                //    {
-                //        Console.WriteLine(d);
-                //    }
-                    
-                //}
-
-                
-                totalItemCount = response.Results.ToList().Count;
                 return res;
             }
 
@@ -50,14 +33,6 @@ public class DrugService
             throw;
         }
     }
-
-
-    private async Task OnPageChanged(int newPage)
-    {
-        currentPage = newPage;
-        await GetDrugsAsync(); // Reload data for the new page
-    }
-
 }
 
 

@@ -1,19 +1,26 @@
 ﻿@page "/drug"
 @using CA3.Client.Pages
-@using Microsoft.AspNetCore.Components.QuickGrid
 
 
 <h3>Drug List</h3>
-<button class="btn btn-primary" @onclick="LoadDrugs" disabled="@isLoading">
-             @(isLoading ? "Loading..." : "Load Drugs")    
-</button>
+<MudTextField @bind-Value="textValue" Label="Type expected drugs name" Variant="Variant.Outlined"></MudTextField>
+<MudButton OnClick="LoadDrugs" Disabled="@isLoading" Variant="Variant.Outlined" Color="Color.Primary">
+    @if (isLoading)
+    {
+        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+        <MudText Class="ms-2">Loading drugs</MudText>
+    }
+    else
+    {
+        <MudText>Search drugs</MudText>
+    }
+</MudButton>
+
 <br>
-<br>
-<br>
+
 @if (drugs != null && drugs.Any())
 {
-    <MudTable T="FullDrug" Items="@drugs.AsQueryable()" Dense="true" Hover="true" Bordered="true" Striped="true" Breakpoint="Breakpoint.Sm"
-              @ref="mudTable" RowClass="cursor-pointer" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent">
+    <MudTable Items="@drugs.AsQueryable()" Dense="true" Hover="true" Bordered="true" Striped="true">
         <ToolBarContent>
             <MudText Typo="Typo.h6">List of Drugs</MudText>
             <MudSpacer />
@@ -29,22 +36,8 @@
         <PagerContent>
             <MudTablePager />
         </PagerContent>
+
     </MudTable>
-    <MudExpansionPanels Style="flex: 1;">
-        <MudExpansionPanel Text="Show inline-clicked event log">
-            @foreach (var message in clickedEvents)
-            {
-                <MudText>@message</MudText>
-            }
-            @if (clickedEvents.Count > 0)
-            {
-                <div class="d-flex">
-                    <MudSpacer />
-                    <MudButton Class="mt-3" ButtonType="ButtonType.Button" Variant="Variant.Filled" OnClick="@(() => clickedEvents.Clear())">Clear events</MudButton>
-                </div>
-            }
-        </MudExpansionPanel>
-    </MudExpansionPanels>
 
 }
 else if (!string.IsNullOrWhiteSpace(errorMessage))
@@ -53,25 +46,36 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
 }
 
 @code {
-
+//     <button class="btn btn-primary" @onclick="LoadDrugs" disabled="@isLoading">
+//              @(isLoading ? "Loading..." : "Load Drugs")    
+// </button>
+    // ---------------- START Variables ----------------
+    // ================ API ============================
     [Inject]
-    private DrugService DrugService { get; set; } = default!;
+    private DrugService service { get; set; } = default!;
     private List<FullDrug> drugs = new();
-    private bool isLoading = false;
     private string? errorMessage;
 
-    private int selectedRowNumber = -1;
-    private MudTable<FullDrug> mudTable;
-    private List<string> clickedEvents = new();
+    // ================ MUDBLAZOR ======================
+    private string? textValue;
+    private bool isLoading = false;
 
-    private async Task LoadDrugs()
+    // ---------------- END Variables ------------------
+
+
+
+
+    // --------------- START Functions ----------------
+    // =============== API ============================
+
+    async Task LoadDrugs()
     {
         isLoading = true;
         errorMessage = null;
 
         try
         {
-            drugs = await DrugService.GetDrugsAsync();
+            drugs = await service.GetDrugsAsync();
         }
         catch (Exception ex)
         {
@@ -83,28 +87,13 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
         }
     }
 
-    private void RowClickEvent(TableRowClickEventArgs<FullDrug> tableRowClickEventArgs)
-    {
-        clickedEvents.Add("Row has been clicked");
-    }
 
-    private string SelectedRowClassFunc(FullDrug element, int rowNumber)
-    {
-        if (selectedRowNumber == rowNumber)
-        {
-            selectedRowNumber = -1;
-            clickedEvents.Add("Selected Row: None");
-            return string.Empty;
-        }
-        else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(element))
-        {
-            selectedRowNumber = rowNumber;
-            clickedEvents.Add($"Selected Row: {rowNumber}");
-            return "selected";
-        }
-        else
-        {
-            return string.Empty;
-        }
-    }
+    // =============== MUDBLAZOR ======================
+
+    // private asyvoid ButtonClick()
+    // {
+    //     LoadDrugs();
+    // }
+
+    // ---------------- END Functions -----------------
 }
