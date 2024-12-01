@@ -33,6 +33,13 @@
             <MudTd DataLabel="Application Number">@string.Join("", context.Openfda.ApplicationNumber)</MudTd>
             <MudTd DataLabel="Generic Name">@string.Join("", context.Openfda.GenericName) </MudTd>
         </RowTemplate>
+        <ChildRowContent>
+            <MudTd ColSpan="3">
+                <MudPaper Elevation="1" Class="pa-3">
+                    <p>Additional information can go here.</p>
+                </MudPaper>
+            </MudTd>
+        </ChildRowContent>
         <PagerContent>
             <MudTablePager />
         </PagerContent>
@@ -46,9 +53,13 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
 }
 
 @code {
-//     <button class="btn btn-primary" @onclick="LoadDrugs" disabled="@isLoading">
-//              @(isLoading ? "Loading..." : "Load Drugs")    
-// </button>
+
+    private void RowClick(TableRowClickEventArgs<FullDrug> args)
+    {
+        // args.Item.
+        // args.Item.IsExpanded = !args.Item.IsExpanded; Toggles the expansion state of the row
+    }
+
     // ---------------- START Variables ----------------
     // ================ API ============================
     [Inject]
