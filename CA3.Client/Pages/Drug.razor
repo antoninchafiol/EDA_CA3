@@ -2,37 +2,46 @@
 @page "/"
 @using CA3.Client.Pages
 
-<MudTextField @bind-Value="textValue" Label="Type expected drugs name" Variant="Variant.Outlined"OnKeyDown="InvokeAsyncByKeyDown"></MudTextField>
-<MudButton OnClick="LoadDrugs" Disabled="@isLoading" Variant="Variant.Outlined" Color="Color.Primary">
-    @if (isLoading)
-    {
-        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-        <MudText Class="ms-2">Loading drugs</MudText>
-    }
-    else
-    {
-        <MudText>Search drugs</MudText>
-    }
-</MudButton>
+<MudPaper Outlined="true" Style="@($"color:{Theme.PaletteLight.Dark}; background:{Theme.PaletteLight.GrayLight};")">
+    <MudText Align="MudBlazor.Align.Center" Typo="Typo.h1"> OpenFDA Drug Search</MudText>
+</MudPaper>
+
+<div class="d-flex align-items-center">
+    <MudTextField @bind-Value="textValue" Label="Expected drug name" Variant="Variant.Outlined" OnKeyDown="InvokeAsyncByKeyDown"></MudTextField>
+    <MudButton OnClick="LoadDrugs" Disabled="@isLoading" Variant="Variant.Filled" Color="Color.Tertiary" class="ms-2" Size="Size.Large">
+        @if (isLoading)
+        {
+            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+            <MudText Class="ms-2">Loading drugs</MudText>
+        }
+        else
+        {
+            <MudText>Search drugs</MudText>
+        }
+    </MudButton>
+</div>
+
 
 <br />
 
 @if (drugs != null && drugs.Any())
 {
-    <MudTable Items="@drugs.AsQueryable()" Dense="true" Hover="true" Bordered="true" Striped="true" Filter="new Func<FullDrug,bool>(FilterFunc1)">
+    <MudTable Items="@drugs.AsQueryable()" Outlined="true" Dense="true" Hover="true" Bordered="true" Striped="true" Filter="new Func<FullDrug,bool>(FilterFunc1)">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">List of Drugs</MudText>
-            <MudTextField @bind-Value="textSearchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            <MudText Typo="Typo.h6">Requested drugs</MudText>
             <MudSpacer />
+            <MudTextField @bind-Value="textSearchString" Placeholder="Filter" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh>Application Number</MudTh>
             <MudTh>Generic Name</MudTh>
-            <MudTh>Action</MudTh>
+            <MudTh>Effectivetime</MudTh>
+            <MudTh>Details</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Application Number">@string.Join("", context.Openfda.ApplicationNumber)</MudTd>
-            <MudTd DataLabel="Generic Name">@string.Join("", context.Openfda.GenericName)</MudTd>
+            <MudTd DataLabel="Application Number">@string.Join(",", context.Openfda.ApplicationNumber)</MudTd>
+            <MudTd DataLabel="Generic Name">@string.Join(",", context.Openfda.GenericName)</MudTd>
+            <MudTd DataLabel="Generic Name">@string.Join(",", context.Openfda.Route)</MudTd>
             <MudTd>
                 <MudButton Variant="Variant.Text" EndIcon="@((context.IsExpanded) ? @Icons.Material.Filled.ExpandLess : @Icons.Material.Filled.ExpandMore)" OnClick="() => ToggleExpansion(context)">
                 </MudButton>
@@ -43,7 +52,12 @@
             {
                 <MudTd ColSpan="3">
                     <MudPaper Elevation="1" Class="pa-3">
-                        <p>Additional information about @string.Join("", context.Openfda.GenericName) can go here.</p>
+                        <MudText Inline="true" Typo="Typo.h6">Substance Name:</MudText>
+                        <MudText Inline="true" Typo="Typo.caption">@string.Join("", context.Openfda.SubstanceName)</MudText>
+                    </MudPaper>
+                    <MudPaper Elevation="1" Class="pa-3">
+                        <MudText Inline="true" Typo="Typo.h6">Pharm Class CS: </MudText>
+                        <MudText Inline="true" Typo="Typo.caption">@string.Join("", context.Openfda.PharmClassCS)</MudText>
                     </MudPaper>
                 </MudTd>
             }
@@ -69,11 +83,12 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
     private DrugService service { get; set; } = default!;
     private List<FullDrug> drugs = new();
     private string? errorMessage;
+    private bool isLoading = false;
 
     // ================ MUDBLAZOR ======================
     private string? textValue;
     private string? textSearchString = "";
-    private bool isLoading = false;
+    private MudTheme Theme = new MudTheme();
 
     // ---------------- END Variables ------------------
 

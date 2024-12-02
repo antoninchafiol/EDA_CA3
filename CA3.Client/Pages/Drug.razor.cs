@@ -64,9 +64,15 @@ public class OpenFDA
 {
     [JsonPropertyName("application_number")]
     public List<string>? ApplicationNumber { get; set; }
+    [JsonPropertyName("substance_name")]
+    public List<string>? SubstanceName { get; set; }
     [JsonPropertyName("brand_name")]
     public List<string>? BrandName { get; set; }
     [JsonPropertyName("generic_name")]
     public List<string>? GenericName { get; set; }
+    [JsonPropertyName("route")]
+    public List<string>? Route { get; set; }
+    [JsonPropertyName("pharm_class_cs")]
+    public List<string>? PharmClassCS { get; set; }
 }
 
