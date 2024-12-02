@@ -1,0 +1,79 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Antonin\\source\\repos\\CA3\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{44A1EFE4-930B-4237-9695-DABE969301FC}|CA3.Client\\CA3.Client.csproj|c:\\users\\antonin\\source\\repos\\ca3\\ca3.client\\pages\\drug.razor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{44A1EFE4-930B-4237-9695-DABE969301FC}|CA3.Client\\CA3.Client.csproj|solutionrelative:ca3.client\\pages\\drug.razor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44A1EFE4-930B-4237-9695-DABE969301FC}|CA3.Client\\CA3.Client.csproj|c:\\users\\antonin\\source\\repos\\ca3\\ca3.client\\pages\\drug.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{44A1EFE4-930B-4237-9695-DABE969301FC}|CA3.Client\\CA3.Client.csproj|solutionrelative:ca3.client\\pages\\drug.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{44A1EFE4-930B-4237-9695-DABE969301FC}|CA3.Client\\CA3.Client.csproj|c:\\users\\antonin\\source\\repos\\ca3\\ca3.client\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{44A1EFE4-930B-4237-9695-DABE969301FC}|CA3.Client\\CA3.Client.csproj|solutionrelative:ca3.client\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 233,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainLayout.razor",
+              "DocumentMoniker": "C:\\Users\\Antonin\\source\\repos\\CA3\\CA3.Client\\Layout\\MainLayout.razor",
+              "RelativeDocumentMoniker": "CA3.Client\\Layout\\MainLayout.razor",
+              "ToolTip": "C:\\Users\\Antonin\\source\\repos\\CA3\\CA3.Client\\Layout\\MainLayout.razor",
+              "RelativeToolTip": "CA3.Client\\Layout\\MainLayout.razor",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-12-02T12:54:20.912Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Drug.razor",
+              "DocumentMoniker": "C:\\Users\\Antonin\\source\\repos\\CA3\\CA3.Client\\Pages\\Drug.razor",
+              "RelativeDocumentMoniker": "CA3.Client\\Pages\\Drug.razor",
+              "ToolTip": "C:\\Users\\Antonin\\source\\repos\\CA3\\CA3.Client\\Pages\\Drug.razor",
+              "RelativeToolTip": "CA3.Client\\Pages\\Drug.razor",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAADMAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-11-21T16:08:38.08Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Drug.razor.cs",
+              "DocumentMoniker": "C:\\Users\\Antonin\\source\\repos\\CA3\\CA3.Client\\Pages\\Drug.razor.cs",
+              "RelativeDocumentMoniker": "CA3.Client\\Pages\\Drug.razor.cs",
+              "ToolTip": "C:\\Users\\Antonin\\source\\repos\\CA3\\CA3.Client\\Pages\\Drug.razor.cs",
+              "RelativeToolTip": "CA3.Client\\Pages\\Drug.razor.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAADwvxsAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-21T16:26:00.401Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
