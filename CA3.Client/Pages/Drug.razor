@@ -1,9 +1,7 @@
 ﻿@page "/drug"
 @using CA3.Client.Pages
 
-
-<h3>Drug List</h3>
-<MudTextField @bind-Value="textValue" Label="Type expected drugs name" Variant="Variant.Outlined"></MudTextField>
+<MudTextField @bind-Value="textValue" Label="Type expected drugs name" Variant="Variant.Outlined"OnKeyDown="InvokeAsyncByKeyDown"></MudTextField>
 <MudButton OnClick="LoadDrugs" Disabled="@isLoading" Variant="Variant.Outlined" Color="Color.Primary">
     @if (isLoading)
     {
@@ -16,34 +14,42 @@
     }
 </MudButton>
 
-<br>
+<br />
 
 @if (drugs != null && drugs.Any())
 {
-    <MudTable Items="@drugs.AsQueryable()" Dense="true" Hover="true" Bordered="true" Striped="true">
+    <MudTable Items="@drugs.AsQueryable()" Dense="true" Hover="true" Bordered="true" Striped="true" Filter="new Func<FullDrug,bool>(FilterFunc1)">
         <ToolBarContent>
             <MudText Typo="Typo.h6">List of Drugs</MudText>
+            <MudTextField @bind-Value="textSearchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
             <MudSpacer />
         </ToolBarContent>
         <HeaderContent>
             <MudTh>Application Number</MudTh>
             <MudTh>Generic Name</MudTh>
+            <MudTh>Action</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Application Number">@string.Join("", context.Openfda.ApplicationNumber)</MudTd>
-            <MudTd DataLabel="Generic Name">@string.Join("", context.Openfda.GenericName) </MudTd>
+            <MudTd DataLabel="Generic Name">@string.Join("", context.Openfda.GenericName)</MudTd>
+            <MudTd>
+                <MudButton Variant="Variant.Text" EndIcon="@((context.IsExpanded) ? @Icons.Material.Filled.ExpandLess : @Icons.Material.Filled.ExpandMore)" OnClick="() => ToggleExpansion(context)">
+                </MudButton>
+            </MudTd>
         </RowTemplate>
         <ChildRowContent>
-            <MudTd ColSpan="3">
-                <MudPaper Elevation="1" Class="pa-3">
-                    <p>Additional information can go here.</p>
-                </MudPaper>
-            </MudTd>
+            @if (context.IsExpanded)
+            {
+                <MudTd ColSpan="3">
+                    <MudPaper Elevation="1" Class="pa-3">
+                        <p>Additional information about @string.Join("", context.Openfda.GenericName) can go here.</p>
+                    </MudPaper>
+                </MudTd>
+            }
         </ChildRowContent>
         <PagerContent>
             <MudTablePager />
         </PagerContent>
-
     </MudTable>
 
 }
@@ -54,11 +60,7 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
 
 @code {
 
-    private void RowClick(TableRowClickEventArgs<FullDrug> args)
-    {
-        // args.Item.
-        // args.Item.IsExpanded = !args.Item.IsExpanded; Toggles the expansion state of the row
-    }
+    @* Error loading drugs: Object reference not set to an instance of an object. *@
 
     // ---------------- START Variables ----------------
     // ================ API ============================
@@ -69,11 +71,10 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
 
     // ================ MUDBLAZOR ======================
     private string? textValue;
+    private string? textSearchString = "";
     private bool isLoading = false;
 
     // ---------------- END Variables ------------------
-
-
 
 
     // --------------- START Functions ----------------
@@ -83,14 +84,16 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
     {
         isLoading = true;
         errorMessage = null;
-
+        textSearchString = "";
         try
         {
-            drugs = await service.GetDrugsAsync();
+            drugs = await service.GetDrugsAsync(textValue);
+
         }
         catch (Exception ex)
         {
             errorMessage = $"Error loading drugs: {ex.Message}";
+            drugs = new();
         }
         finally
         {
@@ -100,11 +103,26 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
 
 
     // =============== MUDBLAZOR ======================
-
-    // private asyvoid ButtonClick()
-    // {
-    //     LoadDrugs();
-    // }
-
+    private bool FilterFunc1(FullDrug element) => FilterFunc(element, textSearchString);
+    private bool FilterFunc(FullDrug element, string searchString)
+    { 
+         bool res = false; 
+         if (string.IsNullOrWhiteSpace(searchString)) 
+             res = true; 
+         if (string.Join("", element.Openfda.GenericName).Contains(searchString, StringComparison.OrdinalIgnoreCase)) 
+             res = true; 
+         return res;
+    }
+     private void ToggleExpansion(FullDrug drug) 
+     { 
+         drug.IsExpanded = !drug.IsExpanded; 
+     } 
+    private async void InvokeAsyncByKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !isLoading)
+        {
+            await LoadDrugs();
+        }
+    }
     // ---------------- END Functions -----------------
 }
