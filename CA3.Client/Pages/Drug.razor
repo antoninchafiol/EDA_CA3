@@ -5,6 +5,7 @@
 <MudPaper Outlined="true" Style="@($"color:{Theme.PaletteLight.Dark}; background:{Theme.PaletteLight.GrayLight};")">
     <MudText Align="MudBlazor.Align.Center" Typo="Typo.h3"> OpenFDA Drug Search</MudText>
     <MudText Align="MudBlazor.Align.Center" Typo="Typo.body1">(Usage: Enter the expected drug's name in the search bar or click the button to fetch an example)</MudText>
+    <MudText Align="MudBlazor.Align.Center" Typo="Typo.body1">Some manufacturer doesn't put all showed information, those would be higlighted as "Not Stated"</MudText>
 </MudPaper>
 
 <div class="d-flex align-items-center">
@@ -67,7 +68,7 @@
                     </MudPaper>
                     <MudPaper Elevation="1" Class="pa-3">
                         <MudText Inline="true" Typo="Typo.body1">Indications & Usage: </MudText>
-                        <MudText Inline="true" Typo="Typo.body2">@(string.Join("", context.Openfda.PharmClassCS) ?? "Not stated")</MudText>
+                        <MudText Inline="true" Typo="Typo.body2">@(string.Join("", context.IndicationAndUsage) ?? "Not stated")</MudText>
                     </MudPaper>
                     <MudPaper Elevation="1" Class="pa-3">
                         <MudText Inline="true" Typo="Typo.body1">Warnings: </MudText>

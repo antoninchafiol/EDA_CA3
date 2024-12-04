@@ -1,6 +1,8 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 using System.Net.Http;
+using Microsoft.VisualBasic;
+using System;
 
 namespace CA3.Client.Pages;
 public class DrugService
@@ -55,22 +57,41 @@ public class DrugListResponse
 {
     public List<FullDrug>? Results { get; set; }
 }
-
 public class FullDrug
 {
     public bool IsExpanded { get; set; }
-    public string? EffectiveTime { get; set; } = string.Empty;
-    public List<string>? InactiveIngredient { get; set; }
+
+    [JsonPropertyName("active_ingredient")]
+    public List<string>? ActiveIngredients { get; set; }
+// --------------------------------------------------------
+    [JsonPropertyName("indications_and_usage")]
+    public List<string>? IndicationAndUsage { get; set; }
+// --------------------------------------------------------
+    [JsonPropertyName("warnings")]
+    public List<string>? Warnings { get; set; }
+// --------------------------------------------------------
+    [JsonPropertyName("warnings_and_precautions")]
+    public List<string>? WarningsAndPrecautions { get; set; }
+// --------------------------------------------------------
+    [JsonPropertyName("adverse_reactions")]
+    public List<string>? AdverseReactions { get; set; }
+// --------------------------------------------------------
+    [JsonPropertyName("dosage_and_administration")]
+    public List<string>? DosageAndAdministration { get; set; }
+// --------------------------------------------------------
+    [JsonPropertyName("drug_interactions")]
+    public List<string>? DrugInteractions { get; set; }
+// --------------------------------------------------------
+    [JsonPropertyName("contraindications")]
+    public List<string>? Contraindications { get; set; }
+// --------------------------------------------------------
+    [JsonPropertyName("storage_and_handling")]
+    public List<string>? StorageAndHandling { get; set; }
+
+
     [JsonPropertyName("purpose")]
     public List<string>? Purpose { get; set; }
-    public List<string>? KeepOutOfReachOfChildren { get; set; }
-    public List<string>? Warnings { get; set; }
-    public List<string>? Questions { get; set; }
-    public List<string>? SplProductDataElements { get; set; }
     public OpenFDA? Openfda { get; set; }
-    public string? SetId { get; set; } = string.Empty;
-    public string? Id { get; set; } = string.Empty;
-    public string? Version { get; set; } = string.Empty;
 }
 
 public class OpenFDA
@@ -86,10 +107,15 @@ public class OpenFDA
     [JsonPropertyName("route")]
     public List<string>? Route { get; set; }
     [JsonPropertyName("pharm_class_cs")]
-    public List<string>? PharmClassCS { get; set; }
-    [JsonPropertyName("manufacturer_name")]
     public List<string>? ManufacturerName {  get; set; }
     [JsonPropertyName("product_type")]
     public List<string>? ProductType { get; set; }
 }
 
+public static class BlazorListStringHelper
+{
+    public static string Display(IEnumerable<String>? list, string ifNullString)
+    {
+        return (list != null && list.Any()) ? string.Join(", ", list) : ifNullString;
+    }
+}
