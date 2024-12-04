@@ -29,13 +29,10 @@ public class DrugService
                 var res = response.Results.Select(drug => { drug.IsExpanded = false; return drug; }).ToList();
                 foreach (var r in res)
                 {
-                    if (r.Purpose != null)
+                    if (r.Openfda == null)
                     {
+                        throw new ArgumentNullException("OpenFDA is null");
                         //Console.WriteLine(string.Join("", r.Purpose) ?? "unknoen");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Null found");
                     }
 
                 }
@@ -106,7 +103,7 @@ public class OpenFDA
     public List<string>? GenericName { get; set; }
     [JsonPropertyName("route")]
     public List<string>? Route { get; set; }
-    [JsonPropertyName("pharm_class_cs")]
+    [JsonPropertyName("manufacturer_name")]
     public List<string>? ManufacturerName {  get; set; }
     [JsonPropertyName("product_type")]
     public List<string>? ProductType { get; set; }
