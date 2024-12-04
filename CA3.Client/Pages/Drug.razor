@@ -11,16 +11,16 @@
 <div class="d-flex align-items-center">
     <MudTextField @bind-Value="textValue" Label="Expected drug name" Variant="Variant.Outlined" OnKeyDown="InvokeAsyncByKeyDown"></MudTextField>
     <MudButton OnClick="LoadDrugs" Disabled="@isLoading" Variant="Variant.Filled" Color="Color.Tertiary" class="ms-2" Size="Size.Large">
-        @if (isLoading)
-        {
-            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-            <MudText Class="ms-2">Loading drugs</MudText>
-        }
-        else
-        {
-            <MudText>Search drugs</MudText>
-        }
-    </MudButton>
+            @if (isLoading)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                <MudText Class="ms-2">Loading drugs</MudText>
+            }
+            else
+            {
+                <MudText>Search drugs</MudText>
+            }
+        </MudButton>
 </div>
 
 
@@ -45,13 +45,55 @@
             <MudTh>Details</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Brand Name">@BlazorListStringHelper.Display(context.Openfda.BrandName, "Not Stated")</MudTd>
-            <MudTd DataLabel="Generic Name">@BlazorListStringHelper.Display(context.Openfda.GenericName, "Not Stated")</MudTd>
-            <MudTd DataLabel="Manufacturer Name">@BlazorListStringHelper.Display(context.Openfda.ManufacturerName, "Not Stated")</MudTd>
-            <MudTd DataLabel="Product Type">@BlazorListStringHelper.Display(context.Openfda.ProductType, "Not Stated")</MudTd>
-            <MudTd DataLabel="Route of Administration">@BlazorListStringHelper.Display(context.Openfda.Route, "Not Stated")</MudTd>
-            <MudTd DataLabel="Application Number">@BlazorListStringHelper.Display(context.Openfda.ApplicationNumber, "Not Stated")</MudTd>
-            <MudTd DataLabel="Purpose">@BlazorListStringHelper.Display(context.Purpose, "Not Stated")</MudTd>
+            <MudTd DataLabel="Brand Name">
+                <MudText Inline="true" Typo="Typo.body2"
+                         Style="@(BlazorListStringHelper.Display(context.Openfda.BrandName, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
+                    @BlazorListStringHelper.Display(context.Openfda.BrandName, "Not Stated")
+                </MudText>
+            </MudTd>
+
+            <MudTd DataLabel="Generic Name">
+                <MudText Inline="true" Typo="Typo.body2"
+                         Style="@(BlazorListStringHelper.Display(context.Openfda.GenericName, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
+                    @BlazorListStringHelper.Display(context.Openfda.GenericName, "Not Stated")
+                </MudText>
+            </MudTd>
+
+            <MudTd DataLabel="Manufacturer Name">
+                <MudText Inline="true" Typo="Typo.body2"
+                         Style="@(BlazorListStringHelper.Display(context.Openfda.ManufacturerName, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
+                    @BlazorListStringHelper.Display(context.Openfda.ManufacturerName, "Not Stated")
+                </MudText>
+            </MudTd>
+
+            <MudTd DataLabel="Product Type">
+                <MudText Inline="true" Typo="Typo.body2"
+                         Style="@(BlazorListStringHelper.Display(context.Openfda.ProductType, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
+                    @BlazorListStringHelper.Display(context.Openfda.ProductType, "Not Stated")
+                </MudText>
+            </MudTd>
+
+            <MudTd DataLabel="Route of Administration">
+                <MudText Inline="true" Typo="Typo.body2"
+                         Style="@(BlazorListStringHelper.Display(context.Openfda.Route, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
+                    @BlazorListStringHelper.Display(context.Openfda.Route, "Not Stated")
+                </MudText>
+            </MudTd>
+
+            <MudTd DataLabel="Application Number">
+                <MudText Inline="true" Typo="Typo.body2"
+                         Style="@(BlazorListStringHelper.Display(context.Openfda.ApplicationNumber, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
+                    @BlazorListStringHelper.Display(context.Openfda.ApplicationNumber, "Not Stated")
+                </MudText>
+            </MudTd>
+
+            <MudTd DataLabel="Purpose">
+                <MudText Inline="true" Typo="Typo.body2"
+                         Style="@(BlazorListStringHelper.Display(context.Purpose, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
+                    @BlazorListStringHelper.Display(context.Purpose, "Not Stated")
+                </MudText>
+            </MudTd>
+
 
             <MudTd>
                 <MudButton Variant="Variant.Text" EndIcon="@((context.IsExpanded) ? @Icons.Material.Filled.ExpandLess : @Icons.Material.Filled.ExpandMore)" OnClick="() => ToggleExpansion(context)">
@@ -67,7 +109,7 @@
                             <MudExpansionPanel Text="Active Ingredients" MaxHeight="150" Style="border: 1px solid #ccc; border-radius: 4px; padding: 8px;">
                                 <MudText Typo="Typo.body2">@BlazorListStringHelper.Display(context.ActiveIngredients, "Not Stated")</MudText>
                             </MudExpansionPanel>
-</MudItem>
+                        </MudItem>
                         <MudItem xs="12" sm="6">
                             <MudExpansionPanel Text="Indications & Usage" MaxHeight="150" Style="border: 1px solid #ccc; border-radius: 4px; padding: 8px;">
                                 <MudText Typo="Typo.body2">@BlazorListStringHelper.Display(context.IndicationAndUsage, "Not Stated")</MudText>
@@ -160,6 +202,7 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
 
     // ================ MUDBLAZOR ======================
     private string? textValue;
+    private int? limitValue;
     private string? textSearchString = "";
     private MudTheme Theme = new MudTheme();
 
