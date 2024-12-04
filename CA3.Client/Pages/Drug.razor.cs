@@ -25,6 +25,18 @@ public class DrugService
             if (response?.Results != null)
             {
                 var res = response.Results.Select(drug => { drug.IsExpanded = false; return drug; }).ToList();
+                foreach (var r in res)
+                {
+                    if (r.Purpose != null)
+                    {
+                        //Console.WriteLine(string.Join("", r.Purpose) ?? "unknoen");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Null found");
+                    }
+
+                }
                 return res;
             }
 
@@ -49,6 +61,7 @@ public class FullDrug
     public bool IsExpanded { get; set; }
     public string? EffectiveTime { get; set; } = string.Empty;
     public List<string>? InactiveIngredient { get; set; }
+    [JsonPropertyName("purpose")]
     public List<string>? Purpose { get; set; }
     public List<string>? KeepOutOfReachOfChildren { get; set; }
     public List<string>? Warnings { get; set; }
@@ -74,5 +87,9 @@ public class OpenFDA
     public List<string>? Route { get; set; }
     [JsonPropertyName("pharm_class_cs")]
     public List<string>? PharmClassCS { get; set; }
+    [JsonPropertyName("manufacturer_name")]
+    public List<string>? ManufacturerName {  get; set; }
+    [JsonPropertyName("product_type")]
+    public List<string>? ProductType { get; set; }
 }
 

@@ -3,7 +3,8 @@
 @using CA3.Client.Pages
 
 <MudPaper Outlined="true" Style="@($"color:{Theme.PaletteLight.Dark}; background:{Theme.PaletteLight.GrayLight};")">
-    <MudText Align="MudBlazor.Align.Center" Typo="Typo.h1"> OpenFDA Drug Search</MudText>
+    <MudText Align="MudBlazor.Align.Center" Typo="Typo.h3"> OpenFDA Drug Search</MudText>
+    <MudText Align="MudBlazor.Align.Center" Typo="Typo.body1">(Usage: Enter the expected drug's name in the search bar or click the button to fetch an example)</MudText>
 </MudPaper>
 
 <div class="d-flex align-items-center">
@@ -33,15 +34,24 @@
             <MudTextField @bind-Value="textSearchString" Placeholder="Filter" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh>Application Number</MudTh>
+            <MudTh>Brand Name</MudTh>
             <MudTh>Generic Name</MudTh>
-            <MudTh>Effectivetime</MudTh>
+            <MudTh>Manufacturer Name</MudTh>
+            <MudTh>Product Type</MudTh>
+            <MudTh>Route of Administration</MudTh>
+            <MudTh>Application Number</MudTh>
+            <MudTh>Purpose</MudTh>
             <MudTh>Details</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Application Number">@string.Join(",", context.Openfda.ApplicationNumber)</MudTd>
-            <MudTd DataLabel="Generic Name">@string.Join(",", context.Openfda.GenericName)</MudTd>
-            <MudTd DataLabel="Generic Name">@string.Join(",", context.Openfda.Route)</MudTd>
+            <MudTd DataLabel="Brand Name">@((context.Openfda.BrandName != null && context.Openfda.BrandName.Any()) ? string.Join(", ", context.Openfda.BrandName) : "Unknown")</MudTd>
+            <MudTd DataLabel="Generic Name">@((context.Openfda.GenericName != null && context.Openfda.GenericName.Any()) ? string.Join(", ", context.Openfda.GenericName) : "Unknown")</MudTd>
+            <MudTd DataLabel="Manufacturer Name">@((context.Openfda.ManufacturerName != null && context.Openfda.ManufacturerName.Any()) ? string.Join(", ", context.Openfda.ManufacturerName) : "Unknown")</MudTd>
+            <MudTd DataLabel="Product Type">@((context.Openfda.ProductType != null && context.Openfda.ProductType.Any()) ? string.Join(", ", context.Openfda.ProductType) : "Unknown")</MudTd>
+            <MudTd DataLabel="Route of Administration">@((context.Openfda.Route != null && context.Openfda.Route.Any()) ? string.Join(", ", context.Openfda.Route) : "Unknown")</MudTd>
+            <MudTd DataLabel="Application Number">@((context.Openfda.ApplicationNumber != null && context.Openfda.ApplicationNumber.Any()) ? string.Join(", ", context.Openfda.ApplicationNumber) : "Unknown")</MudTd>
+            <MudTd DataLabel="Purpose">@((context.Purpose != null && context.Purpose.Any()) ? string.Join(", ", context.Purpose).Replace("Purpose", "") : "Unknown")</MudTd>
+
             <MudTd>
                 <MudButton Variant="Variant.Text" EndIcon="@((context.IsExpanded) ? @Icons.Material.Filled.ExpandLess : @Icons.Material.Filled.ExpandMore)" OnClick="() => ToggleExpansion(context)">
                 </MudButton>
@@ -52,12 +62,44 @@
             {
                 <MudTd ColSpan="3">
                     <MudPaper Elevation="1" Class="pa-3">
-                        <MudText Inline="true" Typo="Typo.h6">Substance Name:</MudText>
-                        <MudText Inline="true" Typo="Typo.caption">@string.Join("", context.Openfda.SubstanceName)</MudText>
+                        <MudText Inline="true" Typo="Typo.body1">Active Ingredients:</MudText>
+                        <MudText Inline="true" Typo="Typo.body2">@(string.Join("", context.Openfda.SubstanceName) ?? "Not stated")</MudText>
                     </MudPaper>
                     <MudPaper Elevation="1" Class="pa-3">
-                        <MudText Inline="true" Typo="Typo.h6">Pharm Class CS: </MudText>
-                        <MudText Inline="true" Typo="Typo.caption">@string.Join("", context.Openfda.PharmClassCS)</MudText>
+                        <MudText Inline="true" Typo="Typo.body1">Indications & Usage: </MudText>
+                        <MudText Inline="true" Typo="Typo.body2">@(string.Join("", context.Openfda.PharmClassCS) ?? "Not stated")</MudText>
+                    </MudPaper>
+                    <MudPaper Elevation="1" Class="pa-3">
+                        <MudText Inline="true" Typo="Typo.body1">Warnings: </MudText>
+                        <MudText Inline="true" Typo="Typo.body2">@((context.Purpose != null && context.Purpose.Any()) ? string.Join(", ", context.Purpose) : "Unknown")</MudText>
+                    </MudPaper>
+                    <MudPaper Elevation="1" Class="pa-3">
+                        <MudText Inline="true" Typo="Typo.body1">Warnings and Precautions</MudText>
+                        <MudText Inline="true" Typo="Typo.body2"></MudText>
+                    </MudPaper>
+                    <MudPaper Elevation="1" Class="pa-3">
+                        <MudText Inline="true" Typo="Typo.body1">Adverse Reactions</MudText>
+                        <MudText Inline="true" Typo="Typo.body2"></MudText>
+                    </MudPaper>
+                    <MudPaper Elevation="1" Class="pa-3">
+                        <MudText Inline="true" Typo="Typo.body1">Dosage and Administration</MudText>
+                        <MudText Inline="true" Typo="Typo.body2"></MudText>
+                    </MudPaper>
+                    <MudPaper Elevation="1" Class="pa-3">
+                        <MudText Inline="true" Typo="Typo.body1">Drug Interactions</MudText>
+                        <MudText Inline="true" Typo="Typo.body2"></MudText>
+                    </MudPaper>
+                    <MudPaper Elevation="1" Class="pa-3">
+                        <MudText Inline="true" Typo="Typo.body1">Contraindications</MudText>
+                        <MudText Inline="true" Typo="Typo.body2"></MudText>
+                    </MudPaper>
+                    <MudPaper Elevation="1" Class="pa-3">
+                        <MudText Inline="true" Typo="Typo.body1">Storage and Handling</MudText>
+                        <MudText Inline="true" Typo="Typo.body2"></MudText>
+                    </MudPaper>
+                    <MudPaper Elevation="1" Class="pa-3">
+                        <MudText Inline="true" Typo="Typo.body1">Manufacturer Contact Info</MudText>
+                        <MudText Inline="true" Typo="Typo.body2"></MudText>
                     </MudPaper>
                 </MudTd>
             }
@@ -66,6 +108,7 @@
             <MudTablePager />
         </PagerContent>
     </MudTable>
+
 
 }
 else if (!string.IsNullOrWhiteSpace(errorMessage))
@@ -95,7 +138,6 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
 
     // --------------- START Functions ----------------
     // =============== API ============================
-
     async Task LoadDrugs()
     {
         isLoading = true;
