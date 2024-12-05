@@ -7,21 +7,22 @@
     <MudText Align="MudBlazor.Align.Center" Typo="Typo.body1">(Usage: Enter the expected drug's name in the search bar or click the button to fetch an example)</MudText>
     <MudText Align="MudBlazor.Align.Center" Typo="Typo.body1">Some manufacturer doesn't put all showed information, those would be higlighted as "Not Stated"</MudText>
 </MudPaper>
-
-<div class="d-flex align-items-center">
-    <MudTextField @bind-Value="textValue" Label="Expected drug name" Variant="Variant.Outlined" OnKeyDown="InvokeAsyncByKeyDown"></MudTextField>
-    <MudButton OnClick="LoadDrugs" Disabled="@isLoading" Variant="Variant.Filled" Color="Color.Tertiary" class="ms-2" Size="Size.Large">
-            @if (isLoading)
-            {
-                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                <MudText Class="ms-2">Loading drugs</MudText>
-            }
-            else
-            {
-                <MudText>Search drugs</MudText>
-            }
-        </MudButton>
+<div class="d-flex align-items-center" style="margin-top: 10px; align-items: stretch;">
+    <MudTextField @bind-Value="textValue" Label="Expected drug name"Variant="Variant.Outlined" OnKeyDown="InvokeAsyncByKeyDown" Class="me-2"/>
+    <MudNumericField @bind-Value="limitValue" Label="Limit the max number  of results by" Variant="Variant.Filled" Step="1" MaxLength="1000" Class="me-2"/>
+    <MudButton OnClick="LoadDrugs" Disabled="@isLoading" Variant="Variant.Filled" Color="Color.Tertiary" Class="ms-2" Size="Size.Large">
+        @if (isLoading)
+        {
+            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+            <MudText Class="ms-2">Loading drugs</MudText>
+        }
+        else
+        {
+            <MudText>Search drugs</MudText>
+        }
+    </MudButton>
 </div>
+
 
 
 <br />
@@ -47,49 +48,49 @@
         <RowTemplate>
             <MudTd DataLabel="Brand Name">
                 <MudText Inline="true" Typo="Typo.body2"
-                         Style="@(BlazorListStringHelper.Display(context.Openfda.BrandName, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
+                Style="@(BlazorListStringHelper.Display(context.Openfda.BrandName, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
                     @BlazorListStringHelper.Display(context.Openfda.BrandName, "Not Stated")
                 </MudText>
             </MudTd>
 
             <MudTd DataLabel="Generic Name">
                 <MudText Inline="true" Typo="Typo.body2"
-                         Style="@(BlazorListStringHelper.Display(context.Openfda.GenericName, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
+                Style="@(BlazorListStringHelper.Display(context.Openfda.GenericName, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
                     @BlazorListStringHelper.Display(context.Openfda.GenericName, "Not Stated")
                 </MudText>
             </MudTd>
 
             <MudTd DataLabel="Manufacturer Name">
                 <MudText Inline="true" Typo="Typo.body2"
-                         Style="@(BlazorListStringHelper.Display(context.Openfda.ManufacturerName, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
+                Style="@(BlazorListStringHelper.Display(context.Openfda.ManufacturerName, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
                     @BlazorListStringHelper.Display(context.Openfda.ManufacturerName, "Not Stated")
                 </MudText>
             </MudTd>
 
             <MudTd DataLabel="Product Type">
                 <MudText Inline="true" Typo="Typo.body2"
-                         Style="@(BlazorListStringHelper.Display(context.Openfda.ProductType, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
+                Style="@(BlazorListStringHelper.Display(context.Openfda.ProductType, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
                     @BlazorListStringHelper.Display(context.Openfda.ProductType, "Not Stated")
                 </MudText>
             </MudTd>
 
             <MudTd DataLabel="Route of Administration">
                 <MudText Inline="true" Typo="Typo.body2"
-                         Style="@(BlazorListStringHelper.Display(context.Openfda.Route, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
+                Style="@(BlazorListStringHelper.Display(context.Openfda.Route, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
                     @BlazorListStringHelper.Display(context.Openfda.Route, "Not Stated")
                 </MudText>
             </MudTd>
 
             <MudTd DataLabel="Application Number">
                 <MudText Inline="true" Typo="Typo.body2"
-                         Style="@(BlazorListStringHelper.Display(context.Openfda.ApplicationNumber, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
+                Style="@(BlazorListStringHelper.Display(context.Openfda.ApplicationNumber, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
                     @BlazorListStringHelper.Display(context.Openfda.ApplicationNumber, "Not Stated")
                 </MudText>
             </MudTd>
 
             <MudTd DataLabel="Purpose">
                 <MudText Inline="true" Typo="Typo.body2"
-                         Style="@(BlazorListStringHelper.Display(context.Purpose, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
+                Style="@(BlazorListStringHelper.Display(context.Purpose, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
                     @BlazorListStringHelper.Display(context.Purpose, "Not Stated")
                 </MudText>
             </MudTd>
@@ -190,7 +191,29 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
 
 @code {
 
-    @* Error loading drugs: Object reference not set to an instance of an object. *@
+@*     Suggestions for Improvement *@
+@*     Enhanced Validation and Error Handling: *@
+
+@* Ensure all user inputs(e.g., drug name) are validated, especially for potential edge cases like special characters or empty inputs. *@
+@* Handle errors gracefully if the API fails or returns an empty response.Display meaningful messages like "No results found for the entered drug name." *@
+@* Improved UI/UX: *@
+
+@* Add loading indicators while data is being fetched. *@
+@* Use color-coding or icons in the table to quickly convey key information (e.g., warnings, approvals). *@
+@* Make the detailed card view collapsible for better user control. *@
+@* Sorting and Filtering: *@
+
+@* Add filtering options (e.g., by route, manufacturer, or approval status). *@
+@* Enable column-based sorting in the table for fields like drug name or application number. *@
+@* Graphing/Visualization: *@
+
+@* Incorporate basic charts for insights, such as: *@
+@* Count of drugs by route of administration. *@
+@* Trends in application approvals over time. *@
+@* Accessibility and Mobile Responsiveness: *@
+
+@* Ensure your UI is fully accessible (e.g., keyboard navigation, ARIA labels). *@
+@* Use a responsive layout for a seamless mobile experience. *@
 
     // ---------------- START Variables ----------------
     // ================ API ============================
@@ -201,9 +224,9 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
     private bool isLoading = false;
 
     // ================ MUDBLAZOR ======================
-    private string? textValue;
-    private int? limitValue;
+    private string? textValue = "";
     private string? textSearchString = "";
+    private int? limitValue = 100;
     private MudTheme Theme = new MudTheme();
 
     // ---------------- END Variables ------------------
@@ -218,7 +241,7 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
         textSearchString = "";
         try
         {
-            drugs = await service.GetDrugsAsync(textValue);
+            drugs = await service.GetDrugsAsync(textValue, limitValue);
 
         }
         catch (Exception ex)

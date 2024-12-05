@@ -14,12 +14,16 @@ public class DrugService
         _httpClient = httpClient;
     }
 
-    public async Task<List<FullDrug>> GetDrugsAsync(string filter)
+    public async Task<List<FullDrug>> GetDrugsAsync(string filter, int? limit)
     {
-        string url = "https://api.fda.gov/drug/label.json?search=_exists_:openfda.route+AND+_exists_:openfda.application_number&limit=100";
+        if (limit == 0 || limit == null)
+        {
+            limit = 1; // We want at least one to get something
+        }
+        string url = $"https://api.fda.gov/drug/label.json?search=_exists_:openfda.route+AND+_exists_:openfda.application_number&limit={limit}";
         if (!string.IsNullOrWhiteSpace(filter) && filter != "*")
         {
-            url = $"https://api.fda.gov/drug/label.json?search=_exists_:openfda.route+AND+_exists_:openfda.application_number+AND+openfda.generic_name:{filter.ToUpper()}";
+            url = $"https://api.fda.gov/drug/label.json?search=_exists_:openfda.route+AND+_exists_:openfda.application_number+AND+openfda.generic_name:{filter.ToUpper()}&limit={limit}";
         }
         try
         {
