@@ -36,17 +36,17 @@
             <MudTextField @bind-Value="textSearchString" Placeholder="Filter" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh>Brand Name</MudTh>
-            <MudTh>Generic Name</MudTh>
-            <MudTh>Manufacturer Name</MudTh>
-            <MudTh>Product Type</MudTh>
-            <MudTh>Route of Administration</MudTh>
-            <MudTh>Application Number</MudTh>
-            <MudTh>Purpose</MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<FullDrug, object>(x => BlazorListStringHelper.Display(x.Openfda.BrandName, NotStatedString))">Brand Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<FullDrug, object>(x => BlazorListStringHelper.Display(x.Openfda.GenericName, NotStatedString))">Generic Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<FullDrug, object>(x => BlazorListStringHelper.Display(x.Openfda.ManufacturerName, NotStatedString))">Manufacturer Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<FullDrug, object>(x => BlazorListStringHelper.Display(x.Openfda.ProductType, NotStatedString))">Product Type</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<FullDrug, object>(x => BlazorListStringHelper.Display(x.Openfda.Route, NotStatedString))">Route of Administration</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<FullDrug, object>(x => BlazorListStringHelper.Display(x.Openfda.ApplicationNumber, NotStatedString))">Application Number</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<FullDrug, object>(x => BlazorListStringHelper.Display(x.Purpose, NotStatedString))">Purpose</MudTableSortLabel></MudTh>
             <MudTh>Details</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Brand Name">
+            <MudTd DataLabel="Brand Name" >
                 <MudText Inline="true" Typo="Typo.body2"
                 Style="@(BlazorListStringHelper.Display(context.Openfda.BrandName, "Not Stated") == "Not Stated" ? "color: red; font-weight: bold;" : "")">
                     @BlazorListStringHelper.Display(context.Openfda.BrandName, "Not Stated")
@@ -191,29 +191,29 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
 
 @code {
 
-@*     Suggestions for Improvement *@
-@*     Enhanced Validation and Error Handling: *@
+    @*     Suggestions for Improvement *@
+    @*     Enhanced Validation and Error Handling: *@
 
-@* Ensure all user inputs(e.g., drug name) are validated, especially for potential edge cases like special characters or empty inputs. *@
-@* Handle errors gracefully if the API fails or returns an empty response.Display meaningful messages like "No results found for the entered drug name." *@
-@* Improved UI/UX: *@
+    @* Ensure all user inputs(e.g., drug name) are validated, especially for potential edge cases like special characters or empty inputs. *@
+    @* Handle errors gracefully if the API fails or returns an empty response.Display meaningful messages like "No results found for the entered drug name." *@
+    @* Improved UI/UX: *@
 
-@* Add loading indicators while data is being fetched. *@
-@* Use color-coding or icons in the table to quickly convey key information (e.g., warnings, approvals). *@
-@* Make the detailed card view collapsible for better user control. *@
-@* Sorting and Filtering: *@
+    @* Add loading indicators while data is being fetched. *@
+    @* Use color-coding or icons in the table to quickly convey key information (e.g., warnings, approvals). *@
+    @* Make the detailed card view collapsible for better user control. *@
+    @* Sorting and Filtering: *@
 
-@* Add filtering options (e.g., by route, manufacturer, or approval status). *@
-@* Enable column-based sorting in the table for fields like drug name or application number. *@
-@* Graphing/Visualization: *@
+    @* Add filtering options (e.g., by route, manufacturer, or approval status). *@
+    @* Enable column-based sorting in the table for fields like drug name or application number. *@
+    @* Graphing/Visualization: *@
 
-@* Incorporate basic charts for insights, such as: *@
-@* Count of drugs by route of administration. *@
-@* Trends in application approvals over time. *@
-@* Accessibility and Mobile Responsiveness: *@
+    @* Incorporate basic charts for insights, such as: *@
+    @* Count of drugs by route of administration. *@
+    @* Trends in application approvals over time. *@
+    @* Accessibility and Mobile Responsiveness: *@
 
-@* Ensure your UI is fully accessible (e.g., keyboard navigation, ARIA labels). *@
-@* Use a responsive layout for a seamless mobile experience. *@
+    @* Ensure your UI is fully accessible (e.g., keyboard navigation, ARIA labels). *@
+    @* Use a responsive layout for a seamless mobile experience. *@
 
     // ---------------- START Variables ----------------
     // ================ API ============================
@@ -227,6 +227,7 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
     private string? textValue = "";
     private string? textSearchString = "";
     private int? limitValue = 100;
+    private string NotStatedString = "Not Stated";
     private MudTheme Theme = new MudTheme();
 
     // ---------------- END Variables ------------------
