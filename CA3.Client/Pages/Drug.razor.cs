@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using System.Net.Http;
 using Microsoft.VisualBasic;
 using System;
+using System.Collections.Generic;
 
 namespace CA3.Client.Pages;
 public class DrugService
@@ -14,14 +15,11 @@ public class DrugService
         _httpClient = httpClient;
     }
 
-    public async Task<List<FullDrug>> GetDrugsAsync(string filter, int? limit)
+    public async Task<List<FullDrug>> GetDrugsAsync(string? filter, int? limit)
     {
-        if (limit == 0 || limit == null)
-        {
-            limit = 1; // We want at least one to get something
-        }
+
         string url = $"https://api.fda.gov/drug/label.json?search=_exists_:openfda.route+AND+_exists_:openfda.application_number&limit={limit}";
-        if (!string.IsNullOrWhiteSpace(filter) && filter != "*")
+        if (!string.IsNullOrWhiteSpace(filter) && filter != "*" && filter != null)
         {
             url = $"https://api.fda.gov/drug/label.json?search=_exists_:openfda.route+AND+_exists_:openfda.application_number+AND+openfda.generic_name:{filter.ToUpper()}&limit={limit}";
         }
@@ -36,7 +34,6 @@ public class DrugService
                     if (r.Openfda == null)
                     {
                         throw new ArgumentNullException("OpenFDA is null");
-                        //Console.WriteLine(string.Join("", r.Purpose) ?? "unknoen");
                     }
 
                 }
@@ -113,7 +110,7 @@ public class OpenFDA
     public List<string>? ProductType { get; set; }
 }
 
-public static class BlazorListStringHelper
+public static class BlazorListStringHelper // Static class to help processing things in the blazor part way qcuiker and easier.
 {
     public static string Display(IEnumerable<String>? list)
     {
