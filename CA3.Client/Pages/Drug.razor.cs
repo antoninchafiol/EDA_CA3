@@ -115,8 +115,8 @@ public class OpenFDA
 
 public static class BlazorListStringHelper
 {
-    public static string Display(IEnumerable<String>? list, string ifNullString)
+    public static string Display(IEnumerable<String>? list)
     {
-        return (list != null && list.Any()) ? string.Join(", ", list) : ifNullString;
+        return (list != null && list.Any()) ? string.Join(", ", list) : "Not Stated";
     }
 }
