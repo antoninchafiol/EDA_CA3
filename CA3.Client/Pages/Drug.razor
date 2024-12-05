@@ -191,10 +191,10 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
 
 @code {
 
-    // ---------------- START Variables ----------------
-    // ================ API ============================
-    [Inject]
-    private DrugService service { get; set; } = default!;
+        // ---------------- START Variables ----------------
+        // ================ API ============================
+        [Inject]
+        private DrugService service { get; set; } = default!;
     private List<FullDrug> drugs = new();
     private string? errorMessage;
     private bool isLoading = false;
@@ -236,12 +236,32 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
     private bool FilterFunc1(FullDrug element) => FilterFunc(element, textSearchString);
     private bool FilterFunc(FullDrug element, string searchString)
     { 
-         bool res = false; 
-         if (string.IsNullOrWhiteSpace(searchString)) 
-             res = true; 
-         if (string.Join("", element.Openfda.GenericName).Contains(searchString, StringComparison.OrdinalIgnoreCase)) 
-             res = true; 
-         return res;
+        bool res = false; 
+        if (string.IsNullOrWhiteSpace(searchString)) 
+            res = true; 
+        if (BlazorListStringHelper.Display(element.Openfda.BrandName).Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            res = true; 
+        if (BlazorListStringHelper.Display(element.Openfda.GenericName).Contains(searchString, StringComparison.OrdinalIgnoreCase)) 
+        { 
+            res = true; 
+        } 
+        if (BlazorListStringHelper.Display(element.Openfda.ManufacturerName).Contains(searchString, StringComparison.OrdinalIgnoreCase)) 
+        { 
+            res = true; 
+        } 
+        if (BlazorListStringHelper.Display(element.Openfda.ProductType).Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        { 
+            res = true; 
+        } 
+        if (BlazorListStringHelper.Display(element.Openfda.Route).Contains(searchString, StringComparison.OrdinalIgnoreCase)) 
+        { 
+            res = true; 
+        } 
+        if (BlazorListStringHelper.Display(element.Purpose).Contains(searchString, StringComparison.OrdinalIgnoreCase)) 
+        { 
+            res = true; 
+        } 
+        return res;
     }
     private void ToggleExpansion(FullDrug drug) 
      { 
