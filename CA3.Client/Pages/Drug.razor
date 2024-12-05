@@ -10,7 +10,7 @@
 </MudPaper>
 <div class="d-flex align-items-center" style="margin-top: 10px; align-items: stretch;">
     <MudTextField @bind-Value="textValue" Label="Expected drug name"Variant="Variant.Outlined" OnKeyDown="InvokeAsyncByKeyDown" Class="me-2"/>
-    <MudNumericField @bind-Value="limitValue" Label="Limit the max number  of results by" Variant="Variant.Filled" Step="1" MaxLength="1000" Class="me-2"/>
+    <MudNumericField @bind-Value="limitValue" Label="Limit the max number  of results by"  OnKeyDown="InvokeAsyncByKeyDown" Variant="Variant.Filled" Step="1" MaxLength="1000" Class="me-2"/>
     <MudButton OnClick="LoadDrugs" Disabled="@isLoading" Variant="Variant.Filled" Color="Color.Tertiary" Class="ms-2" Size="Size.Large">
         @if (isLoading)
         {
@@ -216,6 +216,8 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
         isLoading = true;
         errorMessage = null;
         textSearchString = "";
+        StateHasChanged();
+
         try
         {
             drugs = await service.GetDrugsAsync(textValue, limitValue);
@@ -229,6 +231,7 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
         finally
         {
             isLoading = false;
+            StateHasChanged();
         }
     }
 
@@ -268,10 +271,11 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
      { 
          drug.IsExpanded = !drug.IsExpanded; 
      } 
-    private async void InvokeAsyncByKeyDown(KeyboardEventArgs e)
+    private async Task InvokeAsyncByKeyDown(KeyboardEventArgs e)
     {
         if (e.Key == "Enter" && !isLoading)
         {
+            await Task.Yield();
             await LoadDrugs();
         }
     }
