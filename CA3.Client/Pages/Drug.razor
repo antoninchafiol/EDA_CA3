@@ -2,10 +2,11 @@
 @page "/"
 @using CA3.Client.Pages
 
-<MudPaper Outlined="true" Style="@($"color:{Theme.PaletteLight.Dark}; background:{Theme.PaletteLight.GrayLight};")">
-    <MudText Align="MudBlazor.Align.Center" Typo="Typo.h3"> OpenFDA Drug Search</MudText>
-    <MudText Align="MudBlazor.Align.Center" Typo="Typo.body1">(Usage: Enter the expected drug's name in the search bar or click the button to fetch an example)</MudText>
-    <MudText Align="MudBlazor.Align.Center" Typo="Typo.body1">Some manufacturer doesn't put all showed information, those would be higlighted as "Not Stated"</MudText>
+<MudPaper
+          Style="@($"color:{Theme.PaletteDark.Dark}; background-image:url('https://img.huffingtonpost.com/asset/5cd6453e2100005900c48002.jpeg?ops=scalefit_720_noupscale&format=webp'); background-size:cover; background-position:center; height:200px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;")">
+    <MudText Align="MudBlazor.Align.Center" Typo="Typo.h1"><b>OpenFDA Drug Search</b></MudText>
+    <MudText Align="MudBlazor.Align.Center" Typo="Typo.h4">Usage: Enter the expected drug's name in the search bar or click the button to fetch an example</MudText>
+    <MudText Align="MudBlazor.Align.Center" Typo="Typo.h4">Note: Some manufacturer doesn't put all showed information, those would be higlighted as "Not Stated"</MudText>
 </MudPaper>
 <div class="d-flex align-items-center" style="margin-top: 10px; align-items: stretch;">
     <MudTextField @bind-Value="textValue" Label="Expected drug name"Variant="Variant.Outlined" OnKeyDown="InvokeAsyncByKeyDown" Class="me-2"/>
@@ -191,10 +192,10 @@ else if (!string.IsNullOrWhiteSpace(errorMessage))
 
 @code {
 
-        // ---------------- START Variables ----------------
-        // ================ API ============================
-        [Inject]
-        private DrugService service { get; set; } = default!;
+    // ---------------- START Variables ----------------
+    // ================ API ============================
+    [Inject]
+    private DrugService service { get; set; } = default!;
     private List<FullDrug> drugs = new();
     private string? errorMessage;
     private bool isLoading = false;
