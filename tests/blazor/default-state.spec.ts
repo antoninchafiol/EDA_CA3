@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('Default page state', async ({ page }) => {
-    await page.goto('https://localhost:7057');
+    await page.goto('http://localhost:5170');
 
     const inputLocator = page.locator('label:has-text("Expected drug name")');
     const isVisible = await inputLocator.isVisible();
