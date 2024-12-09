@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('Search with empty drug name', async ({ page }) => {
+test('Search limited output', async ({ page }) => {
     await page.goto('http://localhost:5170');
 
     await page.locator('input.mud-input-root.mud-input-root-filled').clear();
