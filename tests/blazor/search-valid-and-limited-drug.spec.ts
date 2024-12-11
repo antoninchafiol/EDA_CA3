@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('Search for valid a drug and for multiple output', async ({ page }) => {
+test('Search for valid drug and for multiple output', async ({ page }) => {
     await page.goto('http://localhost:5170');
 
     await page.locator('label:has-text("Expected drug name")').waitFor({ state: 'visible' });

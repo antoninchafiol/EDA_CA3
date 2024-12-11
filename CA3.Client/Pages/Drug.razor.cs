@@ -23,6 +23,8 @@ public class DrugService
         {
             url = $"https://api.fda.gov/drug/label.json?search=_exists_:openfda.route+AND+_exists_:openfda.application_number+AND+openfda.generic_name:{filter.ToUpper()}&limit={limit}";
         }
+
+
         try
         {
             var response = await _httpClient.GetFromJsonAsync<DrugListResponse>(url);
